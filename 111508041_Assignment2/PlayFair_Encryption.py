@@ -11,6 +11,7 @@ def main():
     key = sys.argv[2].lower()
 
     alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    alphabets2 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     unique_key_string = "".join(OrderedDict.fromkeys(key))
 
     if unique_key_string.find('i') >= 0 and unique_key_string.find('j'):
@@ -20,10 +21,15 @@ def main():
             unique_key_string = unique_key_string.replace("i", "")
 
     unique_key = OrderedDict.fromkeys(unique_key_string)
-    remaining_alphabets = set(alphabets) - set(unique_key)
+    if 'j' in unique_key_string:
+    	remaining_alphabets = set(alphabets2) - set(unique_key)
+    elif 'i' in unique_key_string:
+    	remaining_alphabets = set(alphabets2) - set(unique_key)
+    else:
+    	remaining_alphabets = set(alphabets) - set(unique_key)
 
     key_matrix = "".join(unique_key) + "".join(list(sorted(remaining_alphabets))[0:25 - len(unique_key)])
-
+	
     matrix = [['z' for i in range(0, 5)] for i in range(0, 5)]
 
     k = 0
@@ -38,8 +44,24 @@ def main():
     fr = open(inputFile, 'r')
     fw = open('encrypted_playfair.txt', 'w')
 
+    flag = 0
+    
     for line in fr:
         line = line.replace(" ", "")
+        for i in range(0, 5):
+        	for j in range(0, 5):
+        		if matrix[i][j] == 'i':
+        			flag = 1
+        			break
+        		elif matrix[i][j] == 'j':
+        			flag = 2
+        			break
+        line = line.lower()
+        if flag == 1:
+        	line = line.replace('j', 'i')
+        if flag == 2:
+        	line = line.replace('i', 'j')
+        	
         for index in range(0, len(line) - 1, 2):
             char1_case = 0
             char2_case = 0
@@ -49,6 +71,7 @@ def main():
                 char2_case = 1
             char1 = line[index].lower()
             char2 = line[index + 1].lower()
+            
             for i in range(0, 5):
                 for j in range(0, 5):
                     if matrix[i][j] == char1:

@@ -30,8 +30,16 @@ def matrixTranspose(matrix):
 def matrixInverse(matrix):
 	if matrixDeterminant(matrix) == 0:
 		return null
+	
 	det = matrixDeterminant(matrix) % 26
-	print(det)
+	modulo_inverse_det = 0
+	for i in range(0, 26):
+		if(((det * i)%26) == 1):
+			modulo_inverse_det = i
+			break
+	
+	print(modulo_inverse_det)
+	det = modulo_inverse_det
 	matrix = matrixTranspose(matrix)
 	print(matrix)
 	resMatrix = [[0 for i in range(0, 3)] for i in range(0, 3)]
